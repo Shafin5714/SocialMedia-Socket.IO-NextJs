@@ -2,7 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { Form, Button, Message, Segment, Divider } from "semantic-ui-react";
 import CommonInputs from "../components/Common/CommonInputs";
 import ImageDropDiv from "../components/Common/ImageDropDiv";
-import { HeaderMessage, FooterMessage } from "../components/Common/WelcomeMessage";
+import {
+  HeaderMessage,
+  FooterMessage,
+} from "../components/Common/WelcomeMessage";
 import axios from "axios";
 import baseUrl from "../utils/baseUrl";
 import { registerUser } from "../utils/authUser";
@@ -19,12 +22,12 @@ function Signup() {
     facebook: "",
     youtube: "",
     twitter: "",
-    instagram: ""
+    instagram: "",
   });
 
   const { name, email, password, bio } = user;
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value, files } = e.target;
 
     if (name === "media") {
@@ -32,7 +35,7 @@ function Signup() {
       setMediaPreview(URL.createObjectURL(files[0]));
     }
 
-    setUser(prev => ({ ...prev, [name]: value }));
+    setUser((prev) => ({ ...prev, [name]: value }));
   };
 
   const [showSocialLinks, setShowSocialLinks] = useState(false);
@@ -51,30 +54,33 @@ function Signup() {
   const inputRef = useRef();
 
   useEffect(() => {
-    const isUser = Object.values({ name, email, password, bio }).every(item =>
+    const isUser = Object.values({ name, email, password, bio }).every((item) =>
       Boolean(item)
     );
     isUser ? setSubmitDisabled(false) : setSubmitDisabled(true);
   }, [user]);
 
+  // Check username
   const checkUsername = async () => {
     setUsernameLoading(true);
     try {
       cancel && cancel();
 
+      // if request is pending we will cancel that
+
       const CancelToken = axios.CancelToken;
 
       const res = await axios.get(`${baseUrl}/api/signup/${username}`, {
-        cancelToken: new CancelToken(canceler => {
+        cancelToken: new CancelToken((canceler) => {
           cancel = canceler;
-        })
+        }),
       });
 
       if (errorMsg !== null) setErrorMsg(null);
 
       if (res.data === "Available") {
         setUsernameAvailable(true);
-        setUser(prev => ({ ...prev, username }));
+        setUser((prev) => ({ ...prev, username }));
       }
     } catch (error) {
       setErrorMsg("Username Not Available");
@@ -87,7 +93,10 @@ function Signup() {
     username === "" ? setUsernameAvailable(false) : checkUsername();
   }, [username]);
 
-  const handleSubmit = async e => {
+
+
+  // Submit 
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setFormLoading(true);
 
@@ -100,6 +109,7 @@ function Signup() {
       setFormLoading(false);
       return setErrorMsg("Error Uploading Image");
     }
+   
 
     await registerUser(user, profilePicUrl, setErrorMsg, setFormLoading);
   };
@@ -107,7 +117,11 @@ function Signup() {
   return (
     <>
       <HeaderMessage />
-      <Form loading={formLoading} error={errorMsg !== null} onSubmit={handleSubmit}>
+      <Form
+        loading={formLoading}
+        error={errorMsg !== null}
+        onSubmit={handleSubmit}
+      >
         <Message
           error
           header="Oops!"
@@ -161,7 +175,7 @@ function Signup() {
               name: "eye",
               circular: true,
               link: true,
-              onClick: () => setShowPassword(!showPassword)
+              onClick: () => setShowPassword(!showPassword),
             }}
             iconPosition="left"
             type={showPassword ? "text" : "password"}
@@ -175,7 +189,7 @@ function Signup() {
             label="Username"
             placeholder="Username"
             value={username}
-            onChange={e => {
+            onChange={(e) => {
               setUsername(e.target.value);
               if (regexUserName.test(e.target.value)) {
                 setUsernameAvailable(true);

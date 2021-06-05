@@ -1,33 +1,31 @@
 const express = require("express");
 const app = express();
-const server = require('http').Server(app)
-const next = require('next')
+const server = require("http").Server(app);
+const next = require("next");
 
-const dev = process.env.NODE_ENV!=='production'
-const nextApp = next({dev})
+const dev = process.env.NODE_ENV !== "production";
+const nextApp = next({ dev });
 
-const handle = nextApp.getRequestHandler()
+const handle = nextApp.getRequestHandler();
 
-require('dotenv').config({path:'./config.env'})
+require("dotenv").config({ path: "./config.env" });
 
-const connectDb = require('./utilsServer/connectDb')
+const connectDb = require("./utilsServer/connectDb");
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000;
 
-connectDb()
-
+connectDb();
+app.use(express.json());
 // all the pages inside next is SSR (For file inside pages to work we use app.all)
 
-nextApp.prepare().then(()=>{
-    app.use('/api/signup', require('./api/signup'))
-    app.use('/api/auth', require('./api/auth'))
+nextApp.prepare().then(() => {
+  app.use("/api/signup", require("./api/signup"));
+  app.use("/api/auth", require("./api/auth"));
 
-    app.all("*", (req, res) => handle(req, res));
+  app.all("*", (req, res) => handle(req, res));
 
-
-    server.listen(PORT,err=>{
-        if(err) throw err
-        console.log(`Express server running on ${PORT}`);
-    })
-})
-
+  server.listen(PORT, (err) => {
+    if (err) throw err;
+    console.log(`Express server running on ${PORT}`);
+  });
+});
