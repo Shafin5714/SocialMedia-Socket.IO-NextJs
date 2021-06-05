@@ -14,7 +14,7 @@
 
 # env 
 config.env
-next.env.config
+next.config.js
 
 # production
 /build
