@@ -3,7 +3,6 @@ const Schema = mongoose.Schema;
 
 const NotificationSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: "User" },
-
   notifications: [
     {
       type: {

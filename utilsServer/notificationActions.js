@@ -18,21 +18,26 @@ const setNotificationToUnread = async userId => {
 
 const newLikeNotification = async (userId, postId, userToNotifyId) => {
   try {
-    console.log(userToNotifyId);
+  
     const userToNotify = await NotificationModel.findOne({ user: userToNotifyId });
+    if(userToNotify){
+      const newNotification = {
+        type: "newLike",
+        user: userId,
+        post: postId,
+        date: Date.now()
+      };
+  
+      await userToNotify.notifications.unshift(newNotification);
+      await userToNotify.save();
+  
+      await setNotificationToUnread(userToNotifyId);
+      return;
+    }else{
+      console.log("not found");
+    }
 
-    const newNotification = {
-      type: "newLike",
-      user: userId,
-      post: postId,
-      date: Date.now()
-    };
-
-    await userToNotify.notifications.unshift(newNotification);
-    await userToNotify.save();
-
-    await setNotificationToUnread(userToNotifyId);
-    return;
+    
   } catch (error) {
     console.error(error);
   }
@@ -70,9 +75,9 @@ const newCommentNotification = async (
   text
 ) => {
   try {
-    console.log(userToNotifyId);
+    // console.log(userToNotifyId);
     const userToNotify = await NotificationModel.findOne({ user: userToNotifyId });
-    console.log(userToNotify);
+   
 
     const newNotification = {
       type: "newComment",
