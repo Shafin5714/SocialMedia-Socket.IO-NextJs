@@ -46,15 +46,10 @@ router.post("/", async (req, res) => {
     }
 
     const payload = { userId: user._id };
-    jwt.sign(
-      payload,
-      process.env.jwtSecret,
-      { expiresIn: "2d" },
-      (err, token) => {
-        if (err) throw err;
-        res.status(200).json(token);
-      }
-    );
+    jwt.sign(payload, process.env.jwtSecret, { expiresIn: "2d" }, (err, token) => {
+      if (err) throw err;
+      res.status(200).json(token);
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).send(`Server error`);

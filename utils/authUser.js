@@ -20,9 +20,9 @@ export const loginUser = async (user, setError, setLoading) => {
   setLoading(true);
   try {
     const res = await axios.post(`${baseUrl}/api/auth`, { user });
+
     setToken(res.data);
   } catch (error) {
- 
     const errorMsg = catchErrors(error);
     setError(errorMsg);
   }

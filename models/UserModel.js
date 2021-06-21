@@ -4,54 +4,26 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema(
   {
     name: { type: String, required: true },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    // select:false by default the password field will not show
+
+    email: { type: String, required: true, unique: true },
+
     password: { type: String, required: true, select: false },
 
-    username: { 
-        type: String,
-        required: true, 
-        unique: true,
-        trim: true 
-    },
+    username: { type: String, required: true, unique: true, trim: true },
 
-    profilePicUrl: {
-      type: String,
-    },
+    profilePicUrl: { type: String },
 
-    newMessagePopup: {
-      type: Boolean,
-      default: true,
-    },
+    newMessagePopup: { type: Boolean, default: true },
 
-    unreadMessage: { 
-        type: Boolean,
-        default: false
-    },
+    unreadMessage: { type: Boolean, default: false },
 
-    unreadNotification: {
-         type: Boolean, 
-         default: false
-    },
+    unreadNotification: { type: Boolean, default: false },
 
-    // enum [there can be only two values inside this no other value than that]
-    role: { 
-        type: String,
-        default: "user",
-        enum: ["user", "root"]
-     },
+    role: { type: String, default: "user", enum: ["user", "root"] },
 
-    resetToken: {
-      type: String,
-    },
+    resetToken: { type: String },
 
-    expireToken: {
-      type: Date,
-    },
+    expireToken: { type: Date }
   },
   { timestamps: true }
 );
